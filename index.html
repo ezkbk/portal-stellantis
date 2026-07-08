@@ -372,6 +372,14 @@ select.cs:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 2px rgba(
       <option value="ITAUNA_C">Stellantis PCMA Itaúna · Horas</option>
       <option value="JABOATAO_C">Stellantis Jaboatão · Horas</option>
     </select>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-lbl">Período:</span>
+    <select class="cs" id="prod-per" onchange="renderPROD()">
+      <option value="todos">Todos os meses (2024–2026)</option>
+      <option value="2024">2024</option>
+      <option value="2025">2025</option>
+      <option value="2026" selected>2026</option>
+    </select>
   </div>
 </div>
 
@@ -1657,8 +1665,10 @@ function renderORC(){
   const ytdVolOrc  = realIdx.reduce((s,i)=>s+d.vol_orc[i],0);
   const ytdVolReal = realIdx.reduce((s,i)=>s+d.vol_real[i],0);
   const costRealIdx= realIdx.filter(i=>d.cost_real[i]>0);
-  const ytdCostOrc = realIdx.length>0?realIdx.reduce((s,i)=>s+d.cost_orc[i],0)/realIdx.length:0;
-  const ytdCostReal= costRealIdx.length>0?costRealIdx.reduce((s,i)=>s+d.cost_real[i],0)/costRealIdx.length:0;
+  const wVolOrc = realIdx.reduce((s,i)=>s+d.vol_orc[i],0);
+  const wVolReal= costRealIdx.reduce((s,i)=>s+d.vol_real[i],0);
+  const ytdCostOrc = wVolOrc>0?realIdx.reduce((s,i)=>s+d.cost_orc[i]*d.vol_orc[i],0)/wVolOrc:0;
+  const ytdCostReal= wVolReal>0?costRealIdx.reduce((s,i)=>s+d.cost_real[i]*d.vol_real[i],0)/wVolReal:0;
 
   function devPct(real,orc){
     if(!orc) return {txt:'--',cls:'kpi-var neutral'};
@@ -1700,22 +1710,32 @@ function renderORC(){
      if(i<=lastReal && d.cost_real[i]>0){ cR+=d.cost_real[i]*d.vol_real[i]; vR+=d.vol_real[i]; }
      cumCostReal.push((i<=lastReal && vR>0)?cR/vR:null);
    }}
+  const MONTHS_Y=[...MONTHS,'YTD'];
+  const nulls12=Array(12).fill(null);
+  const barYtdVolOrc =[...nulls12, ytdVolOrc];
+  const barYtdVolReal=[...nulls12, ytdVolReal>0?ytdVolReal:null];
+  const barYtdCostOrc =[...nulls12, ytdCostOrc];
+  const barYtdCostReal=[...nulls12, ytdCostReal>0?ytdCostReal:null];
 
   // ── VOLUME CHART ───────────────────────────────────────────────────────────
-  mk('orc-vol-chart',{type:'bar',data:{labels:MONTHS,datasets:[
-    {label:'Orcado',data:d.vol_orc,
-     backgroundColor:MONTHS.map((_,i)=>d.dev_vol[i]===-1?'rgba(67,191,206,0.30)':'rgba(67,191,206,0.72)'),
+  mk('orc-vol-chart',{type:'bar',data:{labels:MONTHS_Y,datasets:[
+    {label:'Orcado',data:[...d.vol_orc,null],
+     backgroundColor:MONTHS.map((_,i)=>d.dev_vol[i]===-1?'rgba(67,191,206,0.30)':'rgba(67,191,206,0.72)').concat(['rgba(0,0,0,0)']),
      borderColor:'rgba(67,191,206,0.9)',borderWidth:1,borderRadius:3},
     {label:'Realizado',
-     data:d.vol_real.map((v,i)=>v>0||(d.dev_vol[i]!==-1&&d.dev_vol[i]!==0)?v:null),
+     data:[...d.vol_real.map((v,i)=>v>0||(d.dev_vol[i]!==-1&&d.dev_vol[i]!==0)?v:null),null],
      backgroundColor:'rgba(10,125,140,0.85)',borderColor:'rgba(10,125,140,1)',
      borderWidth:1,borderRadius:3},
-    {label:'Orçado YTD',data:cumVolOrc,type:'line',yAxisID:'y1',
+    {label:'Orçado acum. (YTD)',data:barYtdVolOrc,type:'bar',yAxisID:'y1',
+     backgroundColor:'rgba(67,191,206,0.60)',borderColor:'rgba(67,191,206,1)',borderWidth:1.5,borderRadius:3,order:3},
+    {label:'Realizado acum. (YTD)',data:barYtdVolReal,type:'bar',yAxisID:'y1',
+     backgroundColor:'rgba(10,125,140,0.80)',borderColor:'rgba(10,125,140,1)',borderWidth:1.5,borderRadius:3,order:3},
+    {label:'Orçado YTD',data:[...cumVolOrc,null],type:'line',yAxisID:'y1',
      borderColor:'rgba(67,191,206,0.95)',borderDash:[5,4],borderWidth:2,
-     pointRadius:0,fill:false,tension:0.25,order:0},
-    {label:'Realizado YTD',data:cumVolReal,type:'line',yAxisID:'y1',
+     pointRadius:0,fill:false,tension:0.25,order:0,spanGaps:false},
+    {label:'Realizado YTD',data:[...cumVolReal,null],type:'line',yAxisID:'y1',
      borderColor:'rgba(10,125,140,1)',borderWidth:2.5,pointRadius:3,
-     pointBackgroundColor:'rgba(10,125,140,1)',fill:false,tension:0.25,order:0},
+     pointBackgroundColor:'rgba(10,125,140,1)',fill:false,tension:0.25,order:0,spanGaps:false},
   ]},options:{responsive:true,maintainAspectRatio:false,
     plugins:{datalabels:{display:false},legend:{labels:{color:'#888',font:{size:11}}},
       tooltip:{mode:'index',intersect:false,callbacks:{
@@ -1738,22 +1758,26 @@ function renderORC(){
 
   // ── COST CHART ────────────────────────────────────────────────────────────
   const hasCostReal=d.cost_real.some(v=>v>0);
-  mk('orc-cost-chart',{type:'bar',data:{labels:MONTHS,datasets:[
-    {label:'Custo Orcado',data:d.cost_orc,type:'bar',
-     backgroundColor:MONTHS.map((_,i)=>d.dev_cost[i]===-1?'rgba(130,70,190,0.22)':'rgba(130,70,190,0.55)'),
+  mk('orc-cost-chart',{type:'bar',data:{labels:MONTHS_Y,datasets:[
+    {label:'Custo Orcado',data:[...d.cost_orc,null],type:'bar',
+     backgroundColor:MONTHS.map((_,i)=>d.dev_cost[i]===-1?'rgba(130,70,190,0.22)':'rgba(130,70,190,0.55)').concat(['rgba(0,0,0,0)']),
      borderColor:'rgba(130,70,190,0.8)',borderWidth:1,borderRadius:3,order:2},
+    {label:'Custo Orç. acum. (YTD)',data:barYtdCostOrc,type:'bar',
+     backgroundColor:'rgba(130,70,190,0.70)',borderColor:'rgba(130,70,190,1)',borderWidth:1.5,borderRadius:3,order:2},
+    {label:'Custo Real. acum. (YTD)',data:barYtdCostReal,type:'bar',
+     backgroundColor:'rgba(10,125,140,0.75)',borderColor:'rgba(10,125,140,1)',borderWidth:1.5,borderRadius:3,order:2},
     ...(hasCostReal?[{
-      label:'Custo Realizado',data:d.cost_real.map(v=>v>0?v:null),type:'line',
+      label:'Custo Realizado',data:[...d.cost_real.map(v=>v>0?v:null),null],type:'line',
       borderColor:'rgba(10,125,140,1)',backgroundColor:'rgba(10,125,140,0.12)',
       pointBackgroundColor:'rgba(10,125,140,1)',pointRadius:5,pointHoverRadius:7,
       borderWidth:2.5,fill:false,tension:0.3,order:1
     }]:[]),
-    {label:'Custo Médio YTD Orçado',data:cumCostOrc,type:'line',
+    {label:'Custo Médio YTD Orçado',data:[...cumCostOrc,null],type:'line',
      borderColor:'rgba(130,70,190,0.9)',borderDash:[5,4],borderWidth:2,
-     pointRadius:0,fill:false,tension:0.25,order:0},
-    ...(hasCostReal?[{label:'Custo Médio YTD Realizado',data:cumCostReal,type:'line',
+     pointRadius:0,fill:false,tension:0.25,order:0,spanGaps:false},
+    ...(hasCostReal?[{label:'Custo Médio YTD Realizado',data:[...cumCostReal,null],type:'line',
      borderColor:'rgba(10,125,140,0.85)',borderDash:[5,4],borderWidth:2,
-     pointRadius:0,fill:false,tension:0.25,order:0}]:[]),
+     pointRadius:0,fill:false,tension:0.25,order:0,spanGaps:false}]:[]),
   ]},options:{responsive:true,maintainAspectRatio:false,
     plugins:{datalabels:{display:false},legend:{labels:{color:'#888',font:{size:11}}},
       tooltip:{mode:'index',intersect:false,callbacks:{
@@ -1869,7 +1893,10 @@ function renderPROD(){
     kpiProd('Custo Total / Produção', 'R$ '+nfmt(last.rpp,2)+' /'+sing, 'Energia total ÷ produção')+
     kpiProd('Acumulado 2026 (YTD)', 'R$ '+nfmt(a26.rpp,2)+' /'+sing, nfmt(a26.cpp,1)+' kWh/'+sing+' · '+ (y26.length||rows.length) +' meses');
 
-  const rc=rows.slice(-24);
+  const per=document.getElementById('prod-per').value;
+  let rc = per==='todos' ? rows.slice() : rows.filter(r=>r.m.startsWith(per));
+  if(!rc.length) rc=rows.slice(-12);
+  const perTxt = per==='todos' ? 'Todos os meses (2024–2026)' : 'Ano '+per;
   const labels=rc.map(r=>mLbl(r.m));
   const baseOpt=(unit,dec)=>({responsive:true,maintainAspectRatio:false,
     plugins:{datalabels:{display:false},legend:{display:false},
@@ -1878,13 +1905,13 @@ function renderPROD(){
       y:{ticks:{color:'#888',font:{size:10},callback:v=>nfmt(v,dec)},grid:{color:'rgba(0,0,0,0.04)'}}}});
 
   document.getElementById('prod-cons-title').textContent='Consumo / Produção — '+pd.planta;
-  document.getElementById('prod-cons-sub').textContent='Energia consumida (MWh) ÷ produção ['+pd.unidade+'] — últimos '+rc.length+' meses [kWh/'+sing+']';
+  document.getElementById('prod-cons-sub').textContent='Energia consumida (MWh) ÷ produção ['+pd.unidade+'] — '+perTxt+' ('+rc.length+' meses) [kWh/'+sing+']';
   mk('prod-cons-chart',{type:'bar',data:{labels,datasets:[{label:'kWh/'+sing,data:rc.map(r=>r.cpp),
     backgroundColor:'rgba(67,191,206,0.72)',borderColor:'rgba(67,191,206,0.95)',borderWidth:1,borderRadius:3}]},
     options:baseOpt('kWh/'+sing,1)});
 
   document.getElementById('prod-cost-title').textContent='Custo Total / Produção — '+pd.planta;
-  document.getElementById('prod-cost-sub').textContent='Custo total de energia (R$) ÷ produção ['+pd.unidade+'] — últimos '+rc.length+' meses [R$/'+sing+']';
+  document.getElementById('prod-cost-sub').textContent='Custo total de energia (R$) ÷ produção ['+pd.unidade+'] — '+perTxt+' ('+rc.length+' meses) [R$/'+sing+']';
   mk('prod-cost-chart',{type:'bar',data:{labels,datasets:[{label:'R$/'+sing,data:rc.map(r=>r.rpp),
     backgroundColor:'rgba(130,70,190,0.6)',borderColor:'rgba(130,70,190,0.85)',borderWidth:1,borderRadius:3}]},
     options:baseOpt('R$/'+sing,2)});
