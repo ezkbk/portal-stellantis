@@ -1971,6 +1971,7 @@ function doDemo(){ grantAccess('DEMO'); }
 function grantAccess(role){
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = '';
+  try{var __sh=document.getElementById('__enbShare');if(__sh)__sh.style.display=(role==='Administrador')?'block':'none';}catch(e){}
 }
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('app').style.display = 'none';
@@ -1980,7 +1981,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 </script>
 
-<div id="__enbShare" style="position:fixed;bottom:20px;right:20px;z-index:2147483000;font-family:'Segoe UI',system-ui,sans-serif">
+<div id="__enbShare" style="position:fixed;bottom:20px;right:20px;z-index:2147483000;font-family:'Segoe UI',system-ui,sans-serif;display:none">
   <button id="__enbShareBtn" onclick="__enbShareDo()" title="Baixa uma cópia deste portal para anexar em e-mail ou WhatsApp. Quem receber abre no navegador." style="background:linear-gradient(135deg,#00C8E8,#00B4D0);color:#fff;border:none;border-radius:26px;padding:12px 20px;font-weight:600;font-size:13.5px;box-shadow:0 8px 22px rgba(0,40,80,.28);cursor:pointer">📤 Compartilhar / Enviar</button>
 </div>
 <script>
