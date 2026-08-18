@@ -380,6 +380,12 @@ select.cs:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 2px rgba(
       <option value="2025">2025</option>
       <option value="2026" selected>2026</option>
     </select>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-lbl" title="Denominador da eficiência de custo">Denominador:</span>
+    <select class="cs" id="prod-den" onchange="renderPROD()">
+      <option value="prod" selected>Produção (R$/unidade)</option>
+      <option value="mwh">MWh (R$/MWh)</option>
+    </select>
   </div>
 </div>
 
@@ -698,7 +704,7 @@ const UL=DS.uc_labels;
 const MNM={1:'Jan',2:'Fev',3:'Mar',4:'Abr',5:'Mai',6:'Jun',7:'Jul',8:'Ago',9:'Set',10:'Out',11:'Nov',12:'Dez'};
 const ANOS_ALL=DS.years;
 const PLD_HIST={"2019-01": {"SE": 122.67, "S": 122.67, "NE": 46.24, "N": 46.24}, "2019-02": {"SE": 71.26, "S": 71.26, "NE": 71.26, "N": 71.26}, "2019-03": {"SE": 168.36, "S": 168.36, "NE": 161.07, "N": 161.07}, "2019-04": {"SE": 215.34, "S": 215.34, "NE": 191.78, "N": 191.78}, "2019-05": {"SE": 199.26, "S": 199.26, "NE": 198.31, "N": 198.31}, "2019-06": {"SE": 248.56, "S": 248.56, "NE": 248.56, "N": 248.56}, "2019-07": {"SE": 287.93, "S": 287.93, "NE": 287.93, "N": 287.93}, "2019-08": {"SE": 206.27, "S": 206.27, "NE": 206.27, "N": 206.27}, "2019-09": {"SE": 297.1, "S": 297.1, "NE": 296.95, "N": 296.95}, "2019-10": {"SE": 140.15, "S": 158.96, "NE": 135.94, "N": 114.2}, "2019-11": {"SE": 74.29, "S": 136.29, "NE": 60.73, "N": 39.11}, "2019-12": {"SE": 36.01, "S": 36.01, "NE": 36.01, "N": 36.01}, "2020-01": {"SE": 65.29, "S": 65.29, "NE": 36.01, "N": 36.01}, "2020-02": {"SE": 104.17, "S": 104.17, "NE": 62.46, "N": 62.99}, "2020-03": {"SE": 80.8, "S": 80.8, "NE": 77.65, "N": 80.6}, "2020-04": {"SE": 77.27, "S": 77.27, "NE": 61.96, "N": 77.27}, "2020-05": {"SE": 91.51, "S": 91.51, "NE": 70.21, "N": 91.51}, "2020-06": {"SE": 261.94, "S": 261.94, "NE": 165.27, "N": 261.94}, "2020-07": {"SE": 456.2, "S": 456.2, "NE": 220.09, "N": 456.2}, "2020-08": {"SE": 242.75, "S": 242.75, "NE": 240.5, "N": 242.75}, "2020-09": {"SE": 220.27, "S": 218.14, "NE": 216.91, "N": 218.16}, "2020-10": {"SE": 150.63, "S": 149.19, "NE": 147.63, "N": 147.47}, "2020-11": {"SE": 98.94, "S": 100.08, "NE": 70.8, "N": 50.43}, "2020-12": {"SE": 120.36, "S": 124.25, "NE": 80.36, "N": 70.12}, "2021-01": {"SE": 198.47, "S": 205.24, "NE": 171.81, "N": 171.63}, "2021-02": {"SE": 305.82, "S": 305.82, "NE": 298.35, "N": 304.67}, "2021-03": {"SE": 529.87, "S": 529.87, "NE": 529.87, "N": 529.87}, "2021-04": {"SE": 529.87, "S": 529.87, "NE": 529.87, "N": 529.87}, "2021-05": {"SE": 523.96, "S": 523.96, "NE": 517.63, "N": 523.96}, "2021-06": {"SE": 226.29, "S": 226.29, "NE": 225.94, "N": 226.29}, "2021-07": {"SE": 79.95, "S": 79.95, "NE": 79.93, "N": 79.95}, "2021-08": {"SE": 60.5, "S": 60.5, "NE": 60.31, "N": 60.18}, "2021-09": {"SE": 57.09, "S": 57.1, "NE": 51.93, "N": 50.56}, "2021-10": {"SE": 50.55, "S": 50.55, "NE": 50.55, "N": 50.55}, "2021-11": {"SE": 50.55, "S": 50.55, "NE": 50.55, "N": 50.55}, "2021-12": {"SE": 50.55, "S": 50.55, "NE": 50.55, "N": 50.55}, "2022-01": {"SE": 50.55, "S": 50.55, "NE": 50.55, "N": 50.55}, "2022-02": {"SE": 50.56, "S": 50.56, "NE": 50.56, "N": 50.56}, "2022-03": {"SE": 60.19, "S": 60.19, "NE": 60.17, "N": 60.19}, "2022-04": {"SE": 69.79, "S": 69.79, "NE": 69.79, "N": 69.79}, "2022-05": {"SE": 50.89, "S": 50.89, "NE": 50.89, "N": 50.89}, "2022-06": {"SE": 50.55, "S": 50.55, "NE": 50.55, "N": 50.55}, "2022-07": {"SE": 50.55, "S": 50.55, "NE": 50.55, "N": 50.55}, "2022-08": {"SE": 50.55, "S": 50.55, "NE": 50.55, "N": 50.55}, "2022-09": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2022-10": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2022-11": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2022-12": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2023-01": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2023-02": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2023-03": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2023-04": {"SE": 62.65, "S": 62.65, "NE": 62.65, "N": 62.65}, "2023-05": {"SE": 72.94, "S": 72.94, "NE": 72.94, "N": 72.94}, "2023-06": {"SE": 67.92, "S": 67.92, "NE": 67.92, "N": 67.92}, "2023-07": {"SE": 76.59, "S": 76.59, "NE": 76.59, "N": 76.59}, "2023-08": {"SE": 67.24, "S": 67.24, "NE": 67.24, "N": 67.24}, "2023-09": {"SE": 55.48, "S": 55.48, "NE": 55.48, "N": 55.48}, "2023-10": {"SE": 55.54, "S": 55.54, "NE": 55.54, "N": 55.54}, "2023-11": {"SE": 55.42, "S": 55.42, "NE": 55.42, "N": 55.42}, "2023-12": {"SE": 55.42, "S": 55.42, "NE": 55.42, "N": 55.42}, "2024-01": {"SE": 55.42, "S": 55.42, "NE": 55.42, "N": 55.42}, "2024-02": {"SE": 60.27, "S": 60.26, "NE": 60.26, "N": 60.27}, "2024-03": {"SE": 79.02, "S": 79.0, "NE": 76.48, "N": 79.03}, "2024-04": {"SE": 107.8, "S": 107.8, "NE": 94.22, "N": 107.81}, "2024-05": {"SE": 279.14, "S": 279.31, "NE": 220.79, "N": 287.14}, "2024-06": {"SE": 436.31, "S": 436.29, "NE": 408.22, "N": 437.91}, "2024-07": {"SE": 93.94, "S": 93.94, "NE": 92.69, "N": 94.07}, "2024-08": {"SE": 58.81, "S": 58.81, "NE": 58.81, "N": 58.81}, "2024-09": {"SE": 53.73, "S": 53.73, "NE": 53.71, "N": 53.71}, "2024-10": {"SE": 85.09, "S": 85.15, "NE": 53.18, "N": 53.18}, "2024-11": {"SE": 297.04, "S": 301.8, "NE": 53.51, "N": 53.51}, "2024-12": {"SE": 183.48, "S": 184.2, "NE": 97.36, "N": 97.35}, "2025-01": {"SE": 192.92, "S": 211.8, "NE": 113.42, "N": 113.61}, "2025-02": {"SE": 213.0, "S": 214.26, "NE": 209.54, "N": 210.8}, "2025-03": {"SE": 190.59, "S": 192.09, "NE": 186.54, "N": 188.65}, "2025-04": {"SE": 260.61, "S": 260.61, "NE": 259.44, "N": 243.82}, "2025-05": {"SE": 236.27, "S": 236.26, "NE": 235.46, "N": 223.12}, "2025-06": {"SE": 227.05, "S": 227.04, "NE": 198.17, "N": 226.33}, "2025-07": {"SE": 252.45, "S": 252.3, "NE": 249.6, "N": 251.03}, "2025-08": {"SE": 241.3, "S": 241.3, "NE": 241.28, "N": 241.28}, "2025-09": {"SE": 224.48, "S": 226.83, "NE": 216.77, "N": 218.14}, "2025-10": {"SE": 347.04, "S": 365.44, "NE": 344.98, "N": 344.98}, "2025-11": {"SE": 278.18, "S": 278.02, "NE": 275.04, "N": 276.62}, "2025-12": {"SE": 265.89, "S": 265.89, "NE": 265.87, "N": 265.87}, "2026-01": {"SE": 247.36, "S": 249.95, "NE": 238.87, "N": 240.38}, "2026-02": {"SE": 382.41, "S": 402.69, "NE": 380.14, "N": 380.14}, "2026-03": {"SE": 301.85, "S": 425.57, "NE": 250.39, "N": 250.39}, "2026-04": {"SE": 211.38, "S": 254.03, "NE": 139.58, "N": 139.28}, "2026-05": {"SE": 220.05, "S": 244.33, "NE": 166.69, "N": 169.13}, "2026-06": {"SE": 187.83, "S": 193.64, "NE": 186.69, "N": 184.42}};
-const PLD_PREV={"2026-06":{"SE":209.0,"S":214.0,"NE":199.0,"N":199.0},"2026-07":{"SE":219.0,"S":219.0,"NE":219.0,"N":219.0},"2026-08":{"SE":256.0,"S":256.0,"NE":256.0,"N":256.0},"2026-09":{"SE":206.0,"S":206.0,"NE":206.0,"N":206.0},"2026-10":{"SE":233.0,"S":233.0,"NE":233.0,"N":233.0},"2026-11":{"SE":211.0,"S":211.0,"NE":211.0,"N":211.0},"2026-12":{"SE":225.0,"S":225.0,"NE":225.0,"N":225.0}};
+const PLD_PREV={"2026-08":{"SE":[164,132,103],"S":[164,132,103],"NE":[164,132,103],"N":[164,132,103]},"2026-09":{"SE":[199,162,138],"S":[199,162,138],"NE":[199,162,138],"N":[199,162,138]},"2026-10":{"SE":[231,162,116],"S":[231,162,116],"NE":[231,162,116],"N":[231,162,116]},"2026-11":{"SE":[350,227,145],"S":[350,227,145],"NE":[350,227,145],"N":[350,227,145]},"2026-12":{"SE":[379,212,101],"S":[379,212,101],"NE":[379,212,101],"N":[379,212,101]},"2027-01":{"SE":[388,218,104],"S":[388,218,104],"NE":[388,218,104],"N":[388,218,104]},"2027-02":{"SE":[397,221,105],"S":[397,221,105],"NE":[397,221,105],"N":[397,221,105]},"2027-03":{"SE":[409,227,106],"S":[409,227,106],"NE":[409,227,106],"N":[409,227,106]}};
 const PLD_ALL=PLD_HIST;
 const PLD_SECO={"2019-01":122.67,"2019-02":71.26,"2019-03":168.36,"2019-04":215.34,"2019-05":199.26,"2019-06":248.56,"2019-07":287.93,"2019-08":206.27,"2019-09":297.1,"2019-10":140.15,"2019-11":74.29,"2019-12":36.01,"2020-01":65.29,"2020-02":104.17,"2020-03":80.8,"2020-04":77.27,"2020-05":91.51,"2020-06":261.94,"2020-07":456.2,"2020-08":242.75,"2020-09":220.27,"2020-10":150.63,"2020-11":98.94,"2020-12":120.36,"2021-01":198.47,"2021-02":305.82,"2021-03":529.87,"2021-04":529.87,"2021-05":523.96,"2021-06":226.29,"2021-07":79.95,"2021-08":60.5,"2021-09":57.09,"2021-10":50.55,"2021-11":50.55,"2021-12":50.55,"2022-01":50.55,"2022-02":50.56,"2022-03":60.19,"2022-04":69.79,"2022-05":50.89,"2022-06":50.55,"2022-07":50.55,"2022-08":50.55,"2022-09":62.65,"2022-10":62.65,"2022-11":62.65,"2022-12":62.65,"2023-01":62.65,"2023-02":62.65,"2023-03":62.65,"2023-04":62.65,"2023-05":72.94,"2023-06":67.92,"2023-07":76.59,"2023-08":67.24,"2023-09":55.48,"2023-10":55.54,"2023-11":55.42,"2023-12":55.42,"2024-01":55.42,"2024-02":60.27,"2024-03":79.02,"2024-04":107.8,"2024-05":279.14,"2024-06":436.31,"2024-07":93.94,"2024-08":58.81,"2024-09":53.73,"2024-10":85.09,"2024-11":297.04,"2024-12":183.48,"2025-01":192.92,"2025-02":213.0,"2025-03":190.59,"2025-04":260.61,"2025-05":236.27,"2025-06":227.05,"2025-07":252.45,"2025-08":241.3,"2025-09":224.48,"2025-10":347.04,"2025-11":278.18,"2025-12":265.89,"2026-01":247.36,"2026-02":382.41,"2026-03":301.85,"2026-04":211.38,"2026-05":220.05};
 const MON_TOTAL={"2024-01":46769.0,"2024-02":49767.9,"2024-03":53125.5,"2024-04":53939.6,"2024-05":52040.7,"2024-06":46791.4,"2024-07":52875.5,"2024-08":53205.9,"2024-09":51656.0,"2024-10":55488.9,"2024-11":54344.9,"2024-12":50403.9,"2025-01":55582.4,"2025-02":52740.4,"2025-03":53733.6,"2025-04":54031.9,"2025-05":54961.0,"2025-06":49020.9,"2025-07":55274.7,"2025-08":56030.4,"2025-09":55473.7,"2025-10":58653.8,"2025-11":56104.5,"2025-12":53246.2,"2026-01":51969.3,"2026-02":52880.6,"2026-03":60605.6,"2026-04":57444.9};
@@ -1144,11 +1150,12 @@ function renderTrend(){
   let actualCount = 0;
 
   if(isPld){
-    // PLD multi-região: histórico (sólido) + previsto (tracejado)
+    // PLD por submercado: histórico (linhas sólidas) + previsão em 3 cenários (tracejado)
     const histKeys = Object.keys(PLD_HIST).sort();
     const prevKeys = Object.keys(PLD_PREV).sort();
     const allPldKeys = [...histKeys, ...prevKeys];
     const histLen   = histKeys.length;
+    const lastHist  = histKeys[histLen-1];
     const pldLbls   = allPldKeys.map(k=>{
       const yr=parseInt(k.slice(0,4)), mo=parseInt(k.slice(5));
       return MNM[mo]+'/'+String(yr).slice(2)+(prevKeys.includes(k)?'*':'');
@@ -1160,40 +1167,52 @@ function renderTrend(){
       {key:'N',  label:'Norte',    color:'rgba(26,172,190,0.88)'},
     ];
     const regions = allRegions.filter(r => pldRegionSet.has(r.key));
-    const pldDatasets = regions.map(r=>({
+    const histDatasets = regions.map(r=>({
       label: r.label,
-      data: allPldKeys.map(k=>{
-        const h=PLD_HIST[k], p=PLD_PREV[k];
-        const v=h?h[r.key]:(p?p[r.key]:null);
-        return v&&v>0?v:null;
-      }),
-      borderColor: r.color,
-      backgroundColor: 'transparent',
+      data: allPldKeys.map(k=> PLD_HIST[k] ? (PLD_HIST[k][r.key]||null) : null),
+      borderColor: r.color, backgroundColor:'transparent',
       borderWidth: 2, pointRadius: 0, pointHoverRadius: 4,
-      fill: false, tension: 0.25, spanGaps: false,
-      segment: { borderDash: ctx => ctx.p0DataIndex >= histLen-1 ? [6,4] : undefined }
+      fill:false, tension:0.25, spanGaps:false
     }));
+    const refReg = regions[0] ? regions[0].key : 'SE';
+    const cenarios = [
+      {idx:0, label:'Pessimista', color:'rgba(224,102,102,0.95)'},
+      {idx:1, label:'Realista',   color:'rgba(45,156,180,0.95)'},
+      {idx:2, label:'Otimista',   color:'rgba(87,187,138,0.95)'},
+    ];
+    const anchor = PLD_HIST[lastHist] ? PLD_HIST[lastHist][refReg] : null;
+    const cenDatasets = cenarios.map(c=>({
+      label: c.label,
+      data: allPldKeys.map(k=>{
+        if(k===lastHist) return anchor;
+        return PLD_PREV[k] ? (PLD_PREV[k][refReg]?.[c.idx] ?? null) : null;
+      }),
+      borderColor: c.color, backgroundColor:'transparent',
+      borderWidth: 2, borderDash:[6,4], pointRadius:0, pointHoverRadius:4,
+      fill:false, tension:0.25, spanGaps:true
+    }));
+    const pldDatasets = [...histDatasets, ...cenDatasets];
     const ttl=document.getElementById('trend-ttl');
-    if(ttl) ttl.textContent='PLD por Submercado — 4 Regiões';
+    if(ttl) ttl.textContent='PLD por Submercado — histórico + previsão (3 cenários)';
     const per=document.getElementById('trend-period-lbl');
-    if(per) per.textContent=(pldLbls[0]||'Jan/19').replace('*','')+' – '+(pldLbls.at(-1)||'Dez/26').replace('*','')+' · * Previsão';
+    if(per) per.textContent=(pldLbls[0]||'Jan/19').replace('*','')+' – '+(pldLbls.at(-1)||'Mar/27').replace('*','')+' · * previsão (pessimista·realista·otimista)';
     mk('ch-trend',{type:'line',
       data:{labels:pldLbls, datasets:pldDatasets},
       options:{responsive:true,maintainAspectRatio:false,
         plugins:{
           legend:{display:true,position:'top',align:'end',
             labels:{color:'#888',boxWidth:20,boxHeight:2,font:{size:10},
-              generateLabels: ch => regions.map((r,i)=>({
-                text: r.label + (i===0?' · — histórico  ╌ previsão':''),
-                strokeStyle:r.color, fillStyle:'transparent', lineWidth:2, hidden:false
-              }))
+              generateLabels: ch => [
+                ...regions.map(r=>({text:r.label, strokeStyle:r.color, fillStyle:'transparent', lineWidth:2, lineDash:[], hidden:false})),
+                ...cenarios.map(c=>({text:c.label+' (prev.)', strokeStyle:c.color, fillStyle:'transparent', lineWidth:2, lineDash:[6,4], hidden:false}))
+              ]
             }
           },
           tooltip:{backgroundColor:'#FFFFFF',borderColor:'#B8E0EA',borderWidth:1,
             titleColor:'#404040',bodyColor:'#555',mode:'index',intersect:false,
             callbacks:{
               title:items=>items[0]?.label?.replace('*',''),
-              label:c=>c.raw===null?null:` ${c.dataset.label}: ${c.raw.toFixed(2)} R$/MWh`
+              label:c=>c.raw===null?null:` ${c.dataset.label}: ${Number(c.raw).toFixed(2)} R$/MWh`
             },filter:item=>item.raw!==null
           },
           datalabels:{display:false}
@@ -1862,14 +1881,14 @@ function prodSeries(u){
     const cons=(e.lp+e.cp)*1000;                              // MWh
     const cost=(e.rlp+e.rcp+e.rdem+e.rdist+e.renc)*1000;      // R$
     const prod=pd.data[m];
-    return {m,prod,cons,cost, cpp:cons*1000/prod, rpp:cost/prod}; // cpp=kWh/un, rpp=R$/un
+    return {m,prod,cons,cost, cpp:cons*1000/prod, rpp:cost/prod, rpm:cons>0?cost/cons:0}; // cpp=kWh/un, rpp=R$/un, rpm=R$/MWh
   });
 }
 function prodAgg(rows){
   const P=rows.reduce((a,r)=>a+r.prod,0);
   const C=rows.reduce((a,r)=>a+r.cons,0);
   const R=rows.reduce((a,r)=>a+r.cost,0);
-  return {P, cpp:P>0?C*1000/P:0, rpp:P>0?R/P:0};
+  return {P, cpp:P>0?C*1000/P:0, rpp:P>0?R/P:0, rpm:C>0?R/C:0};
 }
 function kpiProd(lbl,val,sub){
   return '<div class="kpi c"><div class="kpi-lbl">'+lbl+'</div>'+
@@ -1881,6 +1900,9 @@ function renderPROD(){
   const u=document.getElementById('prod-uc').value;
   const pd=PROD_DATA[u];
   const sing=PROD_SING[pd.unidade]||'un';
+  const den=(document.getElementById('prod-den')||{}).value||'prod';
+  const dLbl=den==='mwh'?'MWh':sing;
+  const costOf=r=>den==='mwh'?r.rpm:r.rpp;
   const rows=prodSeries(u);
   if(!rows.length){document.getElementById('prod-kpi-row').innerHTML='<div class="kpi c"><div class="kpi-lbl">Sem dados</div></div>';return;}
   const last=rows[rows.length-1];
@@ -1890,8 +1912,8 @@ function renderPROD(){
   document.getElementById('prod-kpi-row').innerHTML=
     kpiProd('Produção — '+mLbl(last.m), nfmt(last.prod,0)+' '+pd.unidade, pd.planta)+
     kpiProd('Consumo / Produção', nfmt(last.cpp,1)+' kWh/'+sing, 'Último mês · '+mLbl(last.m))+
-    kpiProd('Custo Total / Produção', 'R$ '+nfmt(last.rpp,2)+' /'+sing, 'Energia total ÷ produção')+
-    kpiProd('Acumulado 2026 (YTD)', 'R$ '+nfmt(a26.rpp,2)+' /'+sing, nfmt(a26.cpp,1)+' kWh/'+sing+' · '+ (y26.length||rows.length) +' meses');
+    kpiProd('Custo Total / '+(den==='mwh'?'MWh':'Produção'), 'R$ '+nfmt(costOf(last),2)+' /'+dLbl, den==='mwh'?'Energia total ÷ MWh consumido':'Energia total ÷ produção')+
+    kpiProd('Acumulado 2026 (YTD)', 'R$ '+nfmt(den==='mwh'?a26.rpm:a26.rpp,2)+' /'+dLbl, nfmt(a26.cpp,1)+' kWh/'+sing+' · '+ (y26.length||rows.length) +' meses');
 
   const per=document.getElementById('prod-per').value;
   let rc = per==='todos' ? rows.slice() : rows.filter(r=>r.m.startsWith(per));
@@ -1910,16 +1932,17 @@ function renderPROD(){
     backgroundColor:'rgba(67,191,206,0.72)',borderColor:'rgba(67,191,206,0.95)',borderWidth:1,borderRadius:3}]},
     options:baseOpt('kWh/'+sing,1)});
 
-  document.getElementById('prod-cost-title').textContent='Custo Total / Produção — '+pd.planta;
-  document.getElementById('prod-cost-sub').textContent='Custo total de energia (R$) ÷ produção ['+pd.unidade+'] — '+perTxt+' ('+rc.length+' meses) [R$/'+sing+']';
-  mk('prod-cost-chart',{type:'bar',data:{labels,datasets:[{label:'R$/'+sing,data:rc.map(r=>r.rpp),
+  document.getElementById('prod-cost-title').textContent='Custo Total / '+(den==='mwh'?'MWh':'Produção')+' — '+pd.planta;
+  document.getElementById('prod-cost-sub').textContent='Custo total de energia (R$) ÷ '+(den==='mwh'?'consumo [MWh]':'produção ['+pd.unidade+']')+' — '+perTxt+' ('+rc.length+' meses) [R$/'+dLbl+']';
+  mk('prod-cost-chart',{type:'bar',data:{labels,datasets:[{label:'R$/'+dLbl,data:rc.map(costOf),
     backgroundColor:'rgba(130,70,190,0.6)',borderColor:'rgba(130,70,190,0.85)',borderWidth:1,borderRadius:3}]},
-    options:baseOpt('R$/'+sing,2)});
+    options:baseOpt('R$/'+dLbl,2)});
 
   const th='padding:8px 12px;text-align:right;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--sub)';
   const thL=th.replace('text-align:right','text-align:left');
   let body='';
   PROD_UCS.forEach(uu=>{
+    if(typeof inScope==='function' && !inScope(uu)) return;
     const r=prodSeries(uu); if(!r.length) return;
     const p=PROD_DATA[uu]; const sg=PROD_SING[p.unidade]||'un';
     const l=r[r.length-1];
@@ -1931,16 +1954,16 @@ function renderPROD(){
       '<td style="text-align:right;padding:7px 12px">'+mLbl(l.m)+'</td>'+
       '<td style="text-align:right;padding:7px 12px">'+nfmt(l.prod,0)+'</td>'+
       '<td style="text-align:right;padding:7px 12px">'+nfmt(l.cpp,1)+' <small>kWh/'+sg+'</small></td>'+
-      '<td style="text-align:right;padding:7px 12px">R$ '+nfmt(l.rpp,2)+'</td>'+
+      '<td style="text-align:right;padding:7px 12px">R$ '+nfmt(den==='mwh'?l.rpm:l.rpp,2)+' <small>/'+dLbl+'</small></td>'+
       '<td style="text-align:right;padding:7px 12px">'+nfmt(a.cpp,1)+' <small>kWh/'+sg+'</small></td>'+
-      '<td style="text-align:right;padding:7px 12px">R$ '+nfmt(a.rpp,2)+'</td></tr>';
+      '<td style="text-align:right;padding:7px 12px">R$ '+nfmt(den==='mwh'?a.rpm:a.rpp,2)+' <small>/'+dLbl+'</small></td></tr>';
   });
   document.getElementById('prod-table-wrap').innerHTML=
     '<table style="width:100%;border-collapse:collapse;font-size:12px">'+
     '<thead><tr><th style="'+thL+'">Planta</th><th style="'+thL+'">Un. Produção</th>'+
     '<th style="'+th+'">Mês</th><th style="'+th+'">Produção</th>'+
-    '<th style="'+th+'">Consumo/Prod.</th><th style="'+th+'">Custo/Prod.</th>'+
-    '<th style="'+th+'">YTD Cons./Prod.</th><th style="'+th+'">YTD Custo/Prod.</th></tr></thead>'+
+    '<th style="'+th+'">Consumo/Prod.</th><th style="'+th+'">Custo/'+(den==='mwh'?'MWh':'Prod.')+'</th>'+
+    '<th style="'+th+'">YTD Cons./Prod.</th><th style="'+th+'">YTD Custo/'+(den==='mwh'?'MWh':'Prod.')+'</th></tr></thead>'+
     '<tbody style="color:var(--txt)">'+body+'</tbody></table>';
 }
 
@@ -1949,16 +1972,15 @@ renderOV();
 
 </div>
 <script>
-const CREDS = {
-  "ZGVtbzpkZW1v": "DEMO",
-  "YWRtaW46ZW5lcmdpYTIwMjY=": "Administrador"
-};
+const USERS = {"YWxleGFuZHJhLmNhdmFsY2FudGlAc3RlbGxhbnRpcy5jb206WEc2LTU1Ng==": {"nome": "Alexandra Cavalcanti", "plantas": ["AUTO_C"]}, "YW5kcmV0aWFnby5tZWxvQHN0ZWxsYW50aXMuY29tOjlZUS02NTM=": {"nome": "Andretiago Melo", "plantas": ["AUTO_C"]}, "bHVpc2EucmliZWlyb0BzdGVsbGFudGlzLmNvbTpBVDYtMzM0": {"nome": "Luisa Ribeiro", "plantas": ["AUTO_C"]}, "bHVjYXMua2FtYXNjaGVAc3RlbGxhbnRpcy5jb206NVA3LTU4OQ==": {"nome": "Lucas Kamasche", "plantas": ["MEC_C"]}, "ZGFuaWxvLnZpdG9yQGJyLnN0ZWxsYW50aXMuY29tOkFRUC0yNTQ=": {"nome": "Danilo Vitor", "plantas": ["MEC_C"]}, "dml0b3Iuc2lxdWVpcmFAc3RlbGxhbnRpcy5jb206NEJYLTU5Ng==": {"nome": "Vitor Siqueira", "plantas": ["GOIANA_C"]}, "ZG91Z2xhcy5zYW50b3NAc3RlbGxhbnRpcy5jb206Q0dRLTM5OQ==": {"nome": "Douglas Santos", "plantas": ["PORTO REAL_C"]}, "Z3VzdGF2by5zZW5hQHRla3NpZC5jb20uYnI6UU4yLTIyNw==": {"nome": "Gustavo Sena", "plantas": ["TEKSID_C"]}, "dml0b3IuZm9uc2VjYUBzdGVsbGFudGlzLmNvbTpFRVMtNzk4": {"nome": "Vitor Fonseca", "plantas": ["ITAUNA_C"]}, "dmljdG9yLnJvZHJpZ3Vlc0BzdGVsbGFudGlzLmNvbTpCRVItNzk1": {"nome": "Victor Rodrigues", "plantas": ["ITAUNA_C"]}, "ZG91Z2xhcy5tb250ZWlyb0BzdGVsbGFudGlzLmNvbTpCSDUtNDY1": {"nome": "Douglas Monteiro", "plantas": ["JABOATAO_C"]}, "ZXdhbnMuY2FkZXRlQHN0ZWxsYW50aXMuY29tOjJHVi05NjU=": {"nome": "Ewans Cadete", "plantas": ["JABOATAO_C"]}, "bHVpei5uZXRvMkBzdGVsbGFudGlzLmNvbTo4OTctOTc0": {"nome": "Luiz Neto2", "plantas": ["JABOATAO_C"]}, "YXJ0aHVyLmhlbnJpcXVlMkBzdGVsbGFudGlzLmNvbTpKTVctNzgz": {"nome": "Arthur Henrique2", "plantas": ["MOPAR_C"]}, "cmVuYXRhLnBpbmhvQGV4dGVybmFsLnN0ZWxsYW50aXMuY29tOkozUS00NzI=": {"nome": "Renata Pinho", "plantas": ["CAMPO LARGO_C"]}, "bWF4aW1pbGlhbS5jaGFnYXNAc3RlbGxhbnRpcy5jb206MjY4LTg4Mg==": {"nome": "Maximiliam Chagas", "plantas": ["CAMPO LARGO_C"]}, "c2VyZ2lvLmFyYXVqb0BzdGVsbGFudGlzLmNvbTpVTVEtMzk2": {"nome": "Sergio Araujo", "plantas": ["CAMPO LARGO_C"]}, "YWRtaW46ZW5lcmdpYTIwMjY=": {"nome": "Administrador", "plantas": "ALL"}, "aXNyYWVsLmt1Ymlha2lAZW5lcmJyYXguY29tOmVuZXJicmF4MjAyNg==": {"nome": "Israel Kubiaki", "plantas": "ALL"}};
+let SCOPE = null;                       // null = global; array = escopo restrito
+function inScope(uc){ return !SCOPE || SCOPE.indexOf(uc)>=0; }
 function doLogin(){
   const u = document.getElementById('l-user').value.trim();
   const p = document.getElementById('l-pass').value;
   const key = btoa(u + ':' + p);
-  if(CREDS[key]){
-    grantAccess(CREDS[key]);
+  if(USERS[key]){
+    grantAccess(USERS[key]);
   } else {
     const err = document.getElementById('l-err');
     err.style.display = 'block';
@@ -1967,11 +1989,43 @@ function doLogin(){
     setTimeout(()=>{ err.style.display='none'; }, 3000);
   }
 }
-function doDemo(){ grantAccess('DEMO'); }
-function grantAccess(role){
+function doDemo(){ /* demo desativado */ }
+function grantAccess(user){
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = '';
-  try{var __sh=document.getElementById('__enbShare');if(__sh)__sh.style.display=(role==='Administrador')?'block':'none';}catch(e){}
+  const global = (user.plantas==='ALL');
+  SCOPE = global ? null : user.plantas.slice();
+  try{var __sh=document.getElementById('__enbShare');if(__sh)__sh.style.display=global?'block':'none';}catch(e){}
+  try{ aplicarEscopo(global, user); }catch(e){ console.warn('escopo', e); }
+}
+function aplicarEscopo(global, user){
+  // saudação (criada dinamicamente)
+  var g=document.getElementById('__scopeGreet');
+  if(!g){ g=document.createElement('div'); g.id='__scopeGreet';
+    g.style.cssText='position:fixed;top:10px;right:16px;z-index:9998;font:600 12px system-ui,-apple-system,\'Segoe UI\',sans-serif;color:#0B1437;background:#fff;border:1px solid #DDE6EF;border-radius:20px;padding:6px 14px;box-shadow:0 4px 14px rgba(0,40,80,.12)';
+    document.body.appendChild(g); }
+  g.textContent='Olá, '+(user.nome||'')+(global?'  ·  visão global':'');
+  g.style.display='block';
+  if(global) return;
+  const allow = SCOPE;
+  // 1) filtra seletores de unidade (remove Brasil e plantas não permitidas)
+  ['sel-view','orc-uc','prod-uc'].forEach(function(id){
+    const sel=document.getElementById(id); if(!sel) return;
+    Array.prototype.slice.call(sel.querySelectorAll('option')).forEach(function(o){
+      if(allow.indexOf(o.value)<0) o.remove();
+    });
+    Array.prototype.slice.call(sel.querySelectorAll('optgroup')).forEach(function(og){ if(!og.querySelector('option')) og.remove(); });
+    if(sel.options.length) sel.selectedIndex=0;
+  });
+  // 2) esconde a aba Comparativo entre Unidades (expõe todas as plantas)
+  var tabCmp=document.querySelector('.tab[data-tab="cmp"]'); if(tabCmp) tabCmp.style.display='none';
+  // 3) se a planta não tem dados de produção, esconde a aba Eficiência
+  var selP=document.getElementById('prod-uc');
+  if(selP && selP.options.length===0){ var tabP=document.querySelector('.tab[data-tab="prod"]'); if(tabP) tabP.style.display='none'; }
+  // 4) re-render
+  try{ if(typeof renderOV==='function') renderOV(); }catch(e){}
+  try{ if(typeof renderORC==='function') renderORC(); }catch(e){}
+  try{ if(typeof renderPROD==='function') renderPROD(); }catch(e){}
 }
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('app').style.display = 'none';
