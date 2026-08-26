@@ -31,6 +31,7 @@ Senha (todos): **energia2026!@#**
 | GLOBAL (vê tudo) | Ligia Alves | ligia.alves@stellantis.com | energia2026!@# |
 | GLOBAL (vê tudo) | Joice Luiza Silva Cassini | joice.cassini@external.stellantis.com | energia2026!@# |
 | GLOBAL (vê tudo) | Roberto Soares | roberto.soares@stellantis.com | energia2026!@# |
+| GLOBAL (vê tudo) | Camila Oliveira Silva | camila.oliveira1@stellantis.com | energia2026!@# |
 
 ## Pendências (me confirmar)
 - **CMA**: ainda não incluída (só CAPR foi pedida agora). A qual unidade corresponde?
