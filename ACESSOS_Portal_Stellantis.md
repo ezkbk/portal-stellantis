@@ -23,11 +23,13 @@ Senha (todos): **energia2026!@#**
 | PCMA Itaúna | Victor Rodrigues | victor.rodrigues@stellantis.com | energia2026!@# |
 | Porto Real | Douglas Santos | douglas.santos@stellantis.com | energia2026!@# |
 | Teksid | Gustavo Sena | gustavo.sena@teksid.com.br | energia2026!@# |
+| CAPR | Andre Yamamoto | andre.yamamoto@external.stellantis.com | energia2026!@# |
+| CAPR | Tiana Oliveira | tiana.oliveira@external.stellantis.com | energia2026!@# |
 | GLOBAL (vê tudo) | Administrador | admin | energia2026!@# |
 | GLOBAL (vê tudo) | Israel Kubiaki | israel.kubiaki@enerbrax.com | energia2026!@# |
 
 ## Pendências (me confirmar)
-- **CAPR** e **CMA**: não existem como unidade no portal. A qual unidade correspondem?
+- **CMA**: ainda não incluída (só CAPR foi pedida agora). A qual unidade corresponde?
 - **Pátio Igarapé** existe no portal mas não tem e-mail na tabela — quem acessa?
 - **Ordem dos cenários de PLD**: assumi mais alta = Pessimista, meio = Realista, mais baixa = Otimista. Confirmar.
 
