@@ -27,6 +27,10 @@ Senha (todos): **energia2026!@#**
 | CAPR | Tiana Oliveira | tiana.oliveira@external.stellantis.com | energia2026!@# |
 | GLOBAL (vê tudo) | Administrador | admin | energia2026!@# |
 | GLOBAL (vê tudo) | Israel Kubiaki | israel.kubiaki@enerbrax.com | energia2026!@# |
+| GLOBAL (vê tudo) | Ayala Augusta Vieira | ayala.vieira@external.stellantis.com | energia2026!@# |
+| GLOBAL (vê tudo) | Ligia Alves | ligia.alves@stellantis.com | energia2026!@# |
+| GLOBAL (vê tudo) | Joice Luiza Silva Cassini | joice.cassini@external.stellantis.com | energia2026!@# |
+| GLOBAL (vê tudo) | Roberto Soares | roberto.soares@stellantis.com | energia2026!@# |
 
 ## Pendências (me confirmar)
 - **CMA**: ainda não incluída (só CAPR foi pedida agora). A qual unidade corresponde?
